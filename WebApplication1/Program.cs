@@ -14,6 +14,13 @@ namespace WebApplication1
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddCors((item) =>
+{
+    item.AddPolicy("default", (opt) =>
+    {
+        opt.WithOrigins("*").AllowAnyHeader().AllowAnyMethod();
+    });
+});
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -26,6 +33,7 @@ namespace WebApplication1
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+            app.UseCors("default");
             app.UseSwagger();
             app.UseSwaggerUI(c =>
                 {
@@ -33,7 +41,7 @@ namespace WebApplication1
                     c.RoutePrefix = string.Empty; // Optional: shows Swagger at root URL
                 });
 
-
+app.UseSwagger(options => options.SerializeAsV2 = true);
             app.MapControllers();
 
             app.Run();
